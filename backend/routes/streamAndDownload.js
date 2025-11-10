@@ -4,8 +4,8 @@ import StoreDownloadIntoD from '../store/downloads.js';
 
  const router = express.Router();
 
-function StreamAndDownload (){
-    router.get(`api/stream-download/:subjectId`, async (req,res)=>{
+
+    router.get(`stream-download/:subjectId`, async (req,res)=>{
         const {subjectId} = req.params;
         const {season,episode} = req.query;
 
@@ -23,5 +23,4 @@ function StreamAndDownload (){
         } catch (error) {
             console.error("Error fetching stream and download Api",error);
         }
-})};
-export default StreamAndDownload;
+}); export default router;

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import DownloadModel from '../models/Downloads.js';
 import { BASE_API } from '../config/env.js';
-import OverallInfo from '../models/Overall.js';
+
 
 
 export async function StoreDownloadIntoDB(seasons,episode,subjectId){

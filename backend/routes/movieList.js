@@ -6,7 +6,7 @@ import { StoreMoviesInDb } from '../store/movies.js';
  const router = express.Router();
 
 
-   const HomeApi = router.get("api/search/:query", async (req,res)=>{
+    router.get("search/:query", async (req,res)=>{
        const { query } = req.params;
        
        if (!query || query.length < 3) {
@@ -29,5 +29,5 @@ import { StoreMoviesInDb } from '../store/movies.js';
         } catch (error) {
             console.error("Something is wrong with home api",error)
         }
-        
-    }) ; export default HomeApi
+
+    }); export default router;

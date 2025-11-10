@@ -4,8 +4,8 @@ import StoreDescriptionInDb from '../store/description.js';
 
  const router = express.Router();
 
- function CheckandStoreDetails (){
-     router.get("api/details/:subjectId", async (req,res)=>{
+ 
+     router.get("details/:subjectId", async (req,res)=>{
         const {subjectId} = req.params;
 
         try {
@@ -23,6 +23,6 @@ import StoreDescriptionInDb from '../store/description.js';
         } catch(error) {
             console.error("Error fetching details check details Api",error)
         }
-     })
- } export default CheckandStoreDetails
+     }); export default router;
+
 

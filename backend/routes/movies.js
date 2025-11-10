@@ -5,7 +5,7 @@ import {BASE_API} from "../config/env.js"
  const router = express.Router();
 
 
-   const HomeApi = router.get("api/home", async (req,res)=>{
+   const HomeApi = router.get("home", async (req,res)=>{
         try {
             
             const response = await axios.get(`${BASE_API}/api/homepage`);

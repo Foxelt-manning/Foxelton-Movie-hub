@@ -1,9 +1,9 @@
 import axios from 'axios';
-import DescriptionModel from '../models/Description';
+import DescriptionModel from '../models/Description.js';
 import { BASE_API } from '../config/env.js';
 
 
-export async function StoreDescriptionInDb(subjectId){
+export  default async function StoreDescriptionInDb(subjectId){
 
 
         
