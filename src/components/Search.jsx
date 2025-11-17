@@ -27,7 +27,7 @@ const Search = () => {
                 searchQuery(query)
 
             }
-        },[query,search])
+        },[query])
 
         const handleClick=()=>{
             if(search.trim().length > 3){

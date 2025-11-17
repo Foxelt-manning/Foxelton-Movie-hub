@@ -56,7 +56,7 @@ const Description = ({descriptionData}) => {
           <p>Movie</p>
         )}
         <Link
-          to={`/stream-download/${subjectId}?season=${s.se}&episode=1&maxEp=${s.maxEp}`}
+          to={`/stream-download/${subjectId}?season=${s.se}&episode=${s.se}&maxEp=${s.maxEp}`}
           className="watch-btn mt-2 md:mt-0"
         >
           Watch
