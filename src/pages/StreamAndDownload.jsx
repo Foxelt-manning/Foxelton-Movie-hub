@@ -28,9 +28,16 @@ const StreamAndDownload = () => {
   
   return (
     <>
-
-   <Downloads data={downloadData}/>
-   <Episodes data={downloadData} subjectId={subjectId} season={season} maxEp={maxEp}/>
+    {downloadData ?(
+      <>
+      <div >
+        <Downloads data={downloadData}/>
+        <Episodes data={downloadData} subjectId={subjectId} season={season} maxEp={maxEp}/>
+      </div>
+      </>
+    ):(<div>
+      Loading ...
+    </div>)}
    </>
   )
 }

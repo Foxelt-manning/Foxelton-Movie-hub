@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const Downloads = ({data}) => {
-if (!data) return <div>Loading .... </div>
+
 
   return (
     <>
