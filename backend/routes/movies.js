@@ -5,20 +5,23 @@ import {BASE_API} from "../config/env.js"
  const router = express.Router();
 
 
-   const HomeApi = router.get("home", async (req,res)=>{
+   const HomeApi = router.get("/home", async (req,res)=>{
         try {
             
-            const response = await axios.get(`${BASE_API}/api/homepage`);
+            const response = await axios.get(`${BASE_API}homepage`);
 
-            const data = response.data?.results?.operatingList || [];
-            let movieList = []
+                const data = response.data?.results?.operatingList || [];
+                let movieList = []
 
-            data.forEach( item =>{ 
-                const value = item?.banner?.items
-                if (value){
-                    movieList.push(...value.subject)
-                }
-            })
+                data.forEach( item =>{ 
+                    const value = item?.banner?.items
+                    if (Array.isArray(value)){
+                        value.forEach( banner => {
+                            if (banner?.subject) {
+                                movieList.push(banner.subject)
+                            }
+                    });
+                }});    
 
             res.json({ movies: movieList });
             

@@ -5,12 +5,12 @@ import StoreDescriptionInDb from '../store/description.js';
  const router = express.Router();
 
  
-     router.get("details/:subjectId", async (req,res)=>{
+     router.get("/details/:subjectId", async (req,res)=>{
         const {subjectId} = req.params;
 
         try {
-                const cachedDetails = await find({
-                    subjectId:{$in :subjectId}
+                const cachedDetails = await Movie.find({
+                    subjectId:subjectId
                 });
 
                 if (cachedDetails.length > 0){

@@ -6,7 +6,7 @@ import { StoreMoviesInDb } from '../store/movies.js';
  const router = express.Router();
 
 
-    router.get("search/:query", async (req,res)=>{
+    router.get("/search/:query", async (req,res)=>{
        const { query } = req.params;
        
        if (!query || query.length < 3) {

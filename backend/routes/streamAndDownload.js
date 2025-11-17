@@ -5,7 +5,7 @@ import StoreDownloadIntoD from '../store/downloads.js';
  const router = express.Router();
 
 
-    router.get(`stream-download/:subjectId`, async (req,res)=>{
+    router.get(`/stream-download/:subjectId`, async (req,res)=>{
         const {subjectId} = req.params;
         const {season,episode} = req.query;
 

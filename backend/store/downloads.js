@@ -9,10 +9,10 @@ export async function StoreDownloadIntoDB(seasons,episode,subjectId){
     // Fetch download by subjectId
     let dataFromApi= null;
             if (seasons < 1){
-                dataFromApi = await axios.get(`${BASE_API}/sources/${subjectId}`);
+                dataFromApi = await axios.get(`${BASE_API}sources/${subjectId}`);
             }
 
-            dataFromApi = await axios.get(`${BASE_API}/sources/${subjectId}?season=${seasons}&episode=${episode}`);
+            dataFromApi = await axios.get(`${BASE_API}sources/${subjectId}?season=${seasons}&episode=${episode}`);
             const downloadData = dataFromApi.data?.results || [];
             
             const ids = downloadData.map(d => d.id);

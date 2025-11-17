@@ -3,26 +3,48 @@ import DescriptionModel from '../models/Description.js';
 import { BASE_API } from '../config/env.js';
 
 
+
 export  default async function StoreDescriptionInDb(subjectId){
 
 
-        
-            const dataFromApi= await axios.get(`${BASE_API}/info/${subjectId}`);
-            const descriptionData = dataFromApi.data?.results?.subject;
+        const response= await axios.get(`${BASE_API}info/${subjectId}`);
+        const descriptionData = response.data?.results?.subject;
+         const FullData = response.data?.results;
+        console.log("Full fetch:", FullData);
+            console.log("Description Data from API: ", descriptionData);
             
-            let existingDescription = await DescriptionModel.find({subjectId:{$in: descriptionData.map(m=>m.subjectId)}}).distinct("subjectId");
-            
-            let newDescription = descriptionData.filter(description => !existingDescription.includes(description.subjectId));
-            
-            if (newDescription.length === 0){
-                console.log("All movies are already cached")
-                await DescriptionModel.insertMany(newDescription,{ordered:false});
+            if (!descriptionData){
+                throw new Error("No description data found from API");
             }
+            
+            let existingDescription = await DescriptionModel.findOne({
+                subjectId:descriptionData.subjectId
+            });
 
-             return newDescription.length === 0 ? newDescription:descriptionData
-            
-            
-            
+            if (existingDescription){
+                console.log("All movies are already cached")
+                return existingDescription;
+            }else{
+                  const descriptionToSave = {
+                    subjectId: descriptionData.subjectId,
+                    title: descriptionData.title,
+                    genres:descriptionData.genre || [],
+                    releaseDate: descriptionData.releaseDate || '',
+                    rating: descriptionData.rating || {},
+                    metadata: FullData.metadata || {},
+                    trailer: descriptionData.trailer || {},
+                    stars:FullData.stars || [], 
+                    seasons: FullData.resource.seasons || [],
+                    imdbRatingValue: descriptionData.imdbRatingValue || '',
+                    duration: descriptionData.duration,
+                    countryName:descriptionData.countryName,
+            cachedAt: new Date()
+        };
+                 await DescriptionModel.create(descriptionToSave);
+             }
+
+            return descriptionData;
+
 
 }
 
