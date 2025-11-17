@@ -3,6 +3,7 @@ import { Routes,Router,Route   } from 'react-router-dom'
 import Homepage from './pages/Homepage'
 import MovieDetails from './pages/MovieDetails'
 import StreamAndDownload from './pages/StreamAndDownload'
+import Search from './components/Search'
 
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
         <Route path="/" element={<Homepage/>} />
         <Route path="/movie/:subjectId" element={<MovieDetails/>}/>
         <Route path="/stream-download/:subjectId" element={<StreamAndDownload/>}/>
+        <Route path="/search/:query" element={<Search/>}/>
       </Routes>
     
   )

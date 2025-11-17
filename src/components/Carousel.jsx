@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React, { useRef } from 'react'
 import Movie from './MovieCard';
 
-const Carousel = ({items}) => {
+const Carousel = ({items,renderItem}) => {
     const rowRef = useRef();
 
     const scroll =(direction)=>{
@@ -31,10 +31,11 @@ const Carousel = ({items}) => {
         {/* scroll Row */}
         <div ref={rowRef} className='flex overflow-x-scroll scrollbar-hide scroll-smooth space-x-3'>
             {items.map((item)=>(
+                
                 <div key={item.subjectId}
                  className="min-w-[180px] h-[260px] bg-gray-800 rounded-lg overflow-hidden shrink-0 cursor-pointer hover:scale-105 transition"
                 >
-                    <Movie movie={item}/>
+                   {renderItem(item)}
                 </div>
             ))}
         <button className='right-arrow'

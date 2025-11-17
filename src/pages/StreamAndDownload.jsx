@@ -5,7 +5,7 @@ import axios from 'axios'
 import Downloads from '../components/DownloadFiles'
 
 const StreamAndDownload = () => {
-  const [data,setData] = useState(null)
+  const [downloadData,setData] = useState(null)
   const {subjectId} =useParams()
 
   const location = useLocation();
@@ -24,12 +24,13 @@ const StreamAndDownload = () => {
     }
     fetchDownloadData()
   },[episode,season,subjectId])
+  console.log(downloadData)
   
   return (
     <>
 
-   <Downloads data={data}/>
-   <Episodes data={data} subjectId={subjectId} season={season} maxEp={maxEp}/>
+   <Downloads data={downloadData}/>
+   <Episodes data={downloadData} subjectId={subjectId} season={season} maxEp={maxEp}/>
    </>
   )
 }

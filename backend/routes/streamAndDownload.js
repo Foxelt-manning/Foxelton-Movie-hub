@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import Movie from '../models/Movies.js';
 import StoreDownloadIntoD from '../store/downloads.js';
+import DownloadModel from '../models/Downloads.js';
 
  const router = express.Router();
 
@@ -10,8 +11,8 @@ import StoreDownloadIntoD from '../store/downloads.js';
         const {season,episode} = req.query;
 
         try {
-            const cachedDownloadLinks = await Movie.find({
-                subjectId:{$in :subjectId}
+            const cachedDownloadLinks = await DownloadModel.find({
+                subjectId:subjectId
             }); 
 
             if (cachedDownloadLinks.length > 0){

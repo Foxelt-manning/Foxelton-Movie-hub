@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import Movie from '../models/Movies.js';
 import StoreDescriptionInDb from '../store/description.js';
+import DescriptionModel from '../models/Description.js';
 
  const router = express.Router();
 
@@ -9,7 +10,7 @@ import StoreDescriptionInDb from '../store/description.js';
         const {subjectId} = req.params;
 
         try {
-                const cachedDetails = await Movie.find({
+                const cachedDetails = await DescriptionModel.find({
                     subjectId:subjectId
                 });
 

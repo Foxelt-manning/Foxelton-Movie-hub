@@ -28,7 +28,7 @@ export  default async function StoreDescriptionInDb(subjectId){
                   const descriptionToSave = {
                     subjectId: descriptionData.subjectId,
                     title: descriptionData.title,
-                    genres:descriptionData.genre || [],
+                    genre:descriptionData.genre ? descriptionData.genre.split(',') : [],
                     releaseDate: descriptionData.releaseDate || '',
                     rating: descriptionData.rating || {},
                     metadata: FullData.metadata || {},
@@ -40,11 +40,10 @@ export  default async function StoreDescriptionInDb(subjectId){
                     countryName:descriptionData.countryName,
             cachedAt: new Date()
         };
-                 await DescriptionModel.create(descriptionToSave);
+                 const savedDescription= await DescriptionModel.create(descriptionToSave);
+                 console.log(savedDescription)
+                 return savedDescription;
              }
-
-            return descriptionData;
-
 
 }
 

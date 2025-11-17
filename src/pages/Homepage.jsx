@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import Movie from '../components/MovieCard';
 import Carousel from '../components/Carousel';
+import Search from '../components/Search';
 
 const Homepage = () => {
     const [movies,setMovies] = useState([]);
@@ -29,18 +30,25 @@ const Homepage = () => {
     <main>
         <div className="pattern"/>
         <div className="wrapper">
+            <Search/>
             <header>
             <h1>Top Picks</h1>
             </header>
 
             <section className='all-movies'>
-                    <Carousel  items={movies}/>
+                    <Carousel  items={movies}
+                    renderItem={(item)=>(<Movie movie={item}/>)}
+                    />
             </section>
 
             <header>
                 <h1>Trending</h1>
                 <section className="all-movies">
-                    <Carousel items={trending} />
+                    <Carousel items={trending}
+                        renderItem={(item)=>(
+                            <Movie movie={item}/>
+                        )}
+                    />
                 </section>
             </header>
         </div>
