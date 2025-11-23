@@ -3,7 +3,7 @@ import { SearchCheck } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Movie from './MovieCard'
-
+const API_URL = import.meta.env.VITE_API_URL
 const Search = () => {
     const [search,setSearch]=useState("")
     const [movies,setMovies]=useState([])
@@ -14,7 +14,7 @@ const Search = () => {
     const searchQuery =async(q)=>{
         if(!q) return;
         try{
-            const res = await axios.get(`http://localhost:3000/api/search/${q}`)
+            const res = await axios.get(`${API_URL}/search/${q}`)
             const movieList = res.data.movies;
             setMovies(movieList);
         }catch(error){

@@ -4,19 +4,20 @@ import Movie from '../components/MovieCard';
 import Carousel from '../components/Carousel';
 import Search from '../components/Search';
 
+const API_URL = import.meta.env.VITE_API_URL
 const Homepage = () => {
     const [movies,setMovies] = useState([]);
     const [trending,setTrending]= useState([]);
 
     useEffect(()=>{
         const fetchHomepage = async () =>{
-            const res = await axios.get(`http://localhost:3000/api/home`);
+            const res = await axios.get(`${API_URL}/home`);
             setMovies(res.data.movies);
         }
         fetchHomepage();
 
         const fetchTrending = async()=>{
-            const res = await axios.get('http://localhost:3000/api/trending');
+            const res = await axios.get(`${API_URL}/trending`);
             const newData = res.data.trendingData
             setTrending(newData);
         }

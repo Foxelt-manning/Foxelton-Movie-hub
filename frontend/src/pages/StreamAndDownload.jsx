@@ -3,7 +3,7 @@ import Episodes from '../components/Episodes'
 import { useLocation, useParams } from 'react-router-dom'
 import axios from 'axios'
 import Downloads from '../components/DownloadFiles'
-
+const API_URL = import.meta.env.VITE_API_URL
 const StreamAndDownload = () => {
   const [downloadData,setData] = useState(null);
   const [loading,setLoading]=useState(true);
@@ -22,7 +22,7 @@ const StreamAndDownload = () => {
       setData(null);
       try {
         
-        const res = await axios.get(`http://localhost:3000/api/stream-download/${subjectId}?season=${season}&episode=${episode}`);
+        const res = await axios.get(`${API_URL}/stream-download/${subjectId}?season=${season}&episode=${episode}`);
         
         const downloadData = res.data.downloads;
         setData(downloadData);
