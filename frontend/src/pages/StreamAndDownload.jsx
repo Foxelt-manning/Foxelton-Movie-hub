@@ -5,7 +5,8 @@ import axios from 'axios'
 import Downloads from '../components/DownloadFiles'
 
 const StreamAndDownload = () => {
-  const [downloadData,setData] = useState(null)
+  const [downloadData,setData] = useState(null);
+  const [loading,setLoading]=useState(true);
   const {subjectId} =useParams()
 
   const location = useLocation();
@@ -17,9 +18,18 @@ const StreamAndDownload = () => {
 
   useEffect(()=>{
     const fetchDownloadData = async()=>{
-      const res = await axios.get(`http://localhost:3000/api/stream-download/${subjectId}?season=${season}&episode=${episode}`);
-      const downloadData = res.data.downloads;
-      setData(downloadData);
+      setLoading(true);
+      setData(null);
+      try {
+        
+        const res = await axios.get(`http://localhost:3000/api/stream-download/${subjectId}?season=${season}&episode=${episode}`);
+        
+        const downloadData = res.data.downloads;
+        setData(downloadData);
+      } catch (error) {
+        console.error(error)
+      }
+      setLoading(false)
 
     }
     fetchDownloadData()
@@ -28,7 +38,7 @@ const StreamAndDownload = () => {
   
   return (
     <>
-    {downloadData ?(
+    {!loading && downloadData ?(
       <>
       <div >
         <Downloads data={downloadData}/>

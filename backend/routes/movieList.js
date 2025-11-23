@@ -16,7 +16,9 @@ import { StoreMoviesInDb } from '../store/movies.js';
         try {
 
             const regex = new RegExp(query, 'i'); // Case-insensitive regex
-            const cachedMovies = await Movie.find({ title: regex });
+            const cachedMovies = await Movie.find({$or:[
+                {title: regex },{genre : regex}
+            ] });
 
        
             if (cachedMovies.length > 0) {
