@@ -81,7 +81,7 @@ const descriptionSchema = new mongoose.Schema({
     cachedAt: {
         type: Date,
         default: Date.now,
-        expires: 60 * 60 * 24 * 7 * 4 * 4 // 4 months
+        expires: 60 * 60 * 24 * 7  // 4 months
     }
 });
 

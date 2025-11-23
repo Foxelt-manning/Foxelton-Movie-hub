@@ -10,7 +10,7 @@ const downloadSchema = new mongoose.Schema({
     cachedAt:{
         type:Date,
         default:Date.now, 
-        expires:60*60*24*7*4
+        expires:60*60*24*7
     }
 })
 
