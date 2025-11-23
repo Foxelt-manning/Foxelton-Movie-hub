@@ -10,18 +10,28 @@ const Homepage = () => {
     const [trending,setTrending]= useState([]);
 
     useEffect(()=>{
-        const fetchHomepage = async () =>{
-            const res = await axios.get(`${API_URL}/home`);
-            setMovies(res.data.movies);
+        const fetchData= async ()=>{
+            try{
+            const fetchHomepage = async () =>{
+                const res = await axios.get(`${API_URL}/home`);
+                setMovies(res.data.movies);
+            }
+            fetchHomepage();
+            
+            await new Promise(r =>setTimeout(r,200));
+            
+            const fetchTrending = async()=>{
+                const res = await axios.get(`${API_URL}/trending`);
+                const newData = res.data.trendingData
+                setTrending(newData);
+            }
+            fetchTrending();
         }
-        fetchHomepage();
-
-        const fetchTrending = async()=>{
-            const res = await axios.get(`${API_URL}/trending`);
-            const newData = res.data.trendingData
-            setTrending(newData);
+        catch(error){
+            console.error(error)
         }
-        fetchTrending();
+        }
+        fetchData();
     },[])
 
 
