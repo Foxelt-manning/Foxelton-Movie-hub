@@ -11,7 +11,7 @@ const MovieDetails = () => {
 
     useEffect(()=>{
         const fetchDescription = async()=> {
-            const res = await axios.get(`${API_URL}}/details/${subjectId}`)
+            const res = await axios.get(`${API_URL}/details/${subjectId}`)
             const descriptionData = res.data.details;
             setDescription(descriptionData);
         }

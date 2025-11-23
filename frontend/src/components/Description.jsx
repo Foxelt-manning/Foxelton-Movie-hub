@@ -5,7 +5,7 @@ import Carousel from './Carousel';
 const Description = ({descriptionData}) => {
 
     if (!descriptionData || descriptionData.length === 0) return <div>Loading ....</div>
-    let data =descriptionData[0]
+    const data = Array.isArray(descriptionData) ? descriptionData[0] : descriptionData
     const{subjectId,title,genre,releaseDate,metadata,trailer,stars,seasons,imdbRatingValue,duration,countryName}=data;
    
 
@@ -50,7 +50,6 @@ const Description = ({descriptionData}) => {
           <div className="flex flex-col gap-1">
             <span>Season: {s.se}</span>
             <span>Episodes: {s.maxEp}</span>
-            <span>Download Resolutions available:</span>
           </div>
         ) : (
           <p>Movie</p>
@@ -70,8 +69,9 @@ const Description = ({descriptionData}) => {
     <span className="flex items-center gap-1">
       <img src="/star.svg" alt="star" className="w-4 h-4" />
       {imdbRatingValue}
-    </span>
+    </span>{duration>0?(
     <p>{Math.floor(duration / 3600)}hr {Math.floor((duration % 3600) / 60)}min</p>
+    ):(<p></p>)}
     <p>{countryName}</p>
   </div>
 </div>
