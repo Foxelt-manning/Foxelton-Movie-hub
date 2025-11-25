@@ -1,20 +1,23 @@
 import axios from 'axios'
 import { SearchCheck } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import Movie from './MovieCard'
 const API_URL = import.meta.env.VITE_API_URL
 const Search = () => {
-    const [search,setSearch]=useState("")
-    const [movies,setMovies]=useState([])
+    const [search,setSearch]=useState("");
+    const [movies,setMovies]=useState([]);
 
-    const {query} = useParams();
     const navigate =useNavigate()
+    const {query} = useParams();
 
-    const searchQuery =async(q)=>{
+    const  [queryParams] = useSearchParams();
+    const page = Number(queryParams.get("page")) || 1;
+
+    const searchQuery =async(q,page)=>{
         if(!q) return;
         try{
-            const res = await axios.get(`${API_URL}/search/${q}`)
+            const res = await axios.get(`${API_URL}/search/${q}?page=${page}`)
             const movieList = res.data.movies;
             setMovies(movieList);
         }catch(error){
@@ -24,13 +27,24 @@ const Search = () => {
         useEffect(()=>{
             if(query && query.length >3){
                 setSearch(query)
-                searchQuery(query)
+                searchQuery(query,page)
 
             }
-        },[query])
+        },[query,page])
+        const handleNext=()=>{
+           navigate(`/search/${query}?page=${page + 1}`)
+        }
+
+        const handlePrevious=()=>{
+            if(page > 1){
+                navigate(`/search/${query}?page=${page - 1}`)
+            }
+        }
+        
 
         const handleClick=()=>{
-            if(search.trim().length > 3){
+            if(search.trim().length >= 3){
+                setMovies([]);
                 navigate(`/search/${encodeURIComponent(search.trim())}`)
             }
         }
@@ -53,15 +67,38 @@ const Search = () => {
             </div>
         </div>
             <div className='all-movies'>    
-                <ul>
 
-         {movies.map((movie)=>(
-             <div key={movie.subjectId}>
-                <Movie movie={movie}/>
-            </div> 
-        ))}
-        </ul>
+        {movies ? (
+            
+            <ul>
+            {movies.map((movie)=>(
+                <div key={movie.subjectId}>
+                   <Movie movie={movie}/>
+               </div> 
+           ))}
+           </ul>
+        ):(        <div>Loading..... </div>   ) 
+        }
             </div>
+<div className='flex justify-center'>
+            {page >1 &&(
+                < button
+                className='watch-btn mt-4'
+                onClick={()=>handlePrevious()}
+                >
+                    Previous
+                </button>
+            )}
+
+            {movies.length >=30 &&(
+                 < button
+                className='watch-btn mt-4'
+                onClick={()=>handleNext()}
+                >
+                    Next
+                </button>
+            )}
+</div>
    </>
   )
 }

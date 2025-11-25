@@ -8,6 +8,7 @@ import { StoreMoviesInDb } from '../store/movies.js';
 
     router.get("/search/:query", async (req,res)=>{
        const { query } = req.params;
+       const { page } = req.query;
        
        if (!query || query.length < 3) {
            return res.json({ message: "Query must be at least 3 characters long" });
@@ -25,7 +26,7 @@ import { StoreMoviesInDb } from '../store/movies.js';
                 return res.json({ message: "success", movies: cachedMovies });
             }
 
-            const newMovies = await StoreMoviesInDb(query);
+            const newMovies = await StoreMoviesInDb(query,page);
             res.json({ message: "fetched from API", movies: newMovies });
             
         } catch (error) {
