@@ -1,15 +1,50 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Loading from './Loading';
 
 const Downloads = ({data}) => {
+  const [video,setVideo] =useState(data[0].stream_url);
+  const [loading,setLoading]= useState(false);
+  const videoRef = useRef(null);
+
+
+  const handleQualityChange = (url) =>{
+    setVideo(url);
+    setLoading(true);
+
+    setTimeout( ()=>{
+      if(videoRef.current){
+        videoRef.current.load();
+        videoRef.current.play().catch(()=>{});
+      }
+    },50)
+  }
 
 
   return (
     <>
+
+    {loading &&(<Loading/>)}
   <div className="flex flex-col items-center gap-6 p-4">
-  <video className="w-full max-w-3xl h-[400px] rounded-lg shadow-lg"  controls>
-    <source src={data[0].stream_url}/>
+  <video className="w-auto max-w-[95vw] h-[75vh] max-h-[95vh] rounded-lg shadow-lg border-2 border-red-500 " 
+   ref={videoRef}
+   key={video} 
+   autoPlay
+    onWaiting={()=>setLoading(true)}
+    onPlaying={()=>setLoading(false)}
+   controls>
+    <source src={video}/>
   </video>
+ <div>
+
+ <p>Video quality</p>
+
+ <select value={video} onChange={(e)=>handleQualityChange(e.target.value)} className='bg-blue-500'>
+    {data.map((ep,i)=>(
+      <option value={ep.stream_url} key={i} >{ep.quality}</option>
+    ))}
+    </select>
+  </div>
 
   <div className="flex flex-wrap justify-center gap-4 w-full max-w-3xl">
     {data.map((ep, i) => (

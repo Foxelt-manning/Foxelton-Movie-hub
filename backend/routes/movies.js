@@ -21,7 +21,7 @@ import {BASE_API} from "../config/env.js"
                                 movieList.push(banner.subject)
                             }
                     });
-                }});    
+                }});   
 
             res.json({ movies: movieList });
             

@@ -193,7 +193,17 @@ display: none
 .left-arrow{
   @apply absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/80 p-2 rounded-full text-white
 }
+.right-arrow{
+  @apply absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/80 p-2 rounded-full text-white
+}
 
+
+.responsive-carousel{
+  @apply flex-[0_0_50%]
+  sm:flex-[0_0_33.33%]
+  md:flex-[0_0_20%]
+  lg:flex-[0_0_16.66%]
+}
 @utility text-gradient {
   @apply bg-linear-to-r from-[#D6C7FF] to-[#AB8BFF] bg-clip-text text-transparent;
 }

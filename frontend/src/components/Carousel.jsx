@@ -12,9 +12,9 @@ const Carousel = ({items,renderItem}) => {
         const  scrollAmount = current.clientWidth - 100;
         
         if(direction === "left"){
-            current.scrollBy({left: -scrollAmount,behavoir:"smooth"})
+          current.scrollBy({ left: -scrollAmount, behavior: "smooth" })
         }else{
-             current.scrollBy({left: scrollAmount,behavoir:"smooth"})
+             current.scrollBy({ left: scrollAmount,behavoir:"smooth"})
         }
     };
 
@@ -29,11 +29,12 @@ const Carousel = ({items,renderItem}) => {
         </button>
 
         {/* scroll Row */}
-        <div ref={rowRef} className='flex overflow-x-scroll scrollbar-hide scroll-smooth space-x-3'>
+        <div ref={rowRef} className=' responsive-carousel
+ flex overflow-x-scroll  hide-scrollbar scroll-smooth space-x-3'>
             {items.map((item)=>(
                 
                 <div key={item.subjectId}
-                 className="min-w-[180px] h-[260px] bg-gray-800 rounded-lg overflow-hidden shrink-0 cursor-pointer hover:scale-105 transition"
+                 className="w-[200px] max-w-[40%]  h-[300px] rounded-lg overflow-hidden shrink-0 cursor-pointer hover:scale-110 transition"
                 >
                    {renderItem(item)}
                 </div>

@@ -40,9 +40,11 @@ const StreamAndDownload = () => {
     <>
     {!loading && downloadData ?(
       <>
-      <div >
+      <div className='pattern'>
+      <div className='grid col-auto' >
         <Downloads data={downloadData}/>
         <Episodes data={downloadData} subjectId={subjectId} season={season} maxEp={maxEp}/>
+      </div>
       </div>
       </>
     ):(<div>

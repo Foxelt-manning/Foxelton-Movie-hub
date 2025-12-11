@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import Movie from '../models/Movies.js';
-import StoreDownloadIntoD from '../store/downloads.js';
+import StoreDownloadIntoDB from '../store/downloads.js';
 import DownloadModel from '../models/Downloads.js';
 
  const router = express.Router();
@@ -18,10 +18,12 @@ import DownloadModel from '../models/Downloads.js';
             if (cachedDownloadLinks.length > 0){
                 return res.json({message:"success",downloads:cachedDownloadLinks})
             }
-            const newDownloadLinks = await StoreDownloadIntoD(season,episode,subjectId);
+            const newDownloadLinks = await StoreDownloadIntoDB(season,episode,subjectId);
+
             res.json({message:"cached download links successfully",downloads:newDownloadLinks})
            
         } catch (error) {
             console.error("Error fetching stream and download Api",error);
+            res.status(500).json({"message":'error with calling downloads'})
         }
 }); export default router;
