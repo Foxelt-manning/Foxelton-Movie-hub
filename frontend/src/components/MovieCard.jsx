@@ -14,7 +14,7 @@ const {subjectId,title,releaseDate,genre,cover} = movie
    <div className="movie-card relative rounded-2xl overflow-hidden w-full">
   {/* Movie Image */}
   <img
-    src={cover.url || "/public/no-movie.png"}
+    src={cover.url || "/no-movie.png"}
     alt={title}
     className="min-w-[180px] h-[260px] object-cover"
     />

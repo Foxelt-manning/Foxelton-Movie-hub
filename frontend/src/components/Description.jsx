@@ -82,12 +82,12 @@ const Description = ({descriptionData}) => {
       <div className='trailer p-4 movie-card rounded-2xl'>
         <div className="w-full md:w-1/2">
           <video controls  className='aspect-video rounded-2xl'>
-            <source src={trailer.videoAddress ?trailer.videoAddress.url : "/public/no-movie.png"}  />
+            <source src={trailer.videoAddress ?trailer.videoAddress.url : "/no-movie.png"}  />
           </video>
         </div>
         <div className="w-full md:w-1/2">
             <img 
-            src={trailer.cover ? trailer.cover.url: "/public/no-movie.png"} 
+            src={trailer.cover ? trailer.cover.url: "/no-movie.png"} 
             alt="trailer pic"
             className='aspect-video rounded-2xl max-h-[300px] '
             />
