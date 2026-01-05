@@ -19,20 +19,20 @@ const StreamAndDownload = () => {
   const maxEp = queryParams.get("maxEp");
 
 
-  const downloadBatch =()=>{
-    const a = document.createElement("a");
-    downloadList.map((i,index)=>{
-      a.href = i ;
-      a.download="";
-      document.body.appendChild(a);
+const downloadBatch = () => {
+  downloadList.forEach((url, index) => {
+    setTimeout(() => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "";
+      a.style.display = "none";
 
-      setTimeout(()=>{
-        a.click();
-        document.body.removeChild(a);
-      },index * 300)
-  })
-    
-  }
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }, index * 300);
+  });
+};
 
 
   useEffect(()=>{
@@ -45,6 +45,8 @@ const StreamAndDownload = () => {
         
         const downloadData = res.data.downloads;
         setData(downloadData);
+        
+      
       } catch (error) {
         console.error(error)
       }
@@ -62,11 +64,12 @@ const StreamAndDownload = () => {
       <div className='pattern'>
       <div className='grid col-auto' >
         {!allowBatch &&(
-             <button onClick={()=> setAllowBatch(true)} className='watch-btn bg-yellow-200'>Batch download</button>
+             <button onClick={()=> setAllowBatch(true)} className='fixed right-0 m-6 border-4 border-green-300 bg-blue-400 transition-all px-3 py-3 rounded-lg z-50'
+             >Batch download</button>
         )}
         {allowBatch &&(
           <>
-          <button onClick={()=>downloadBatch()} className="genre-border">Start Download</button>
+          <button onClick={()=>downloadBatch()} className="fixed right-0 m-6 border-4 border-yellow-300 bg-transparent transition-all px-3 py-3 rounded-lg z-50">Start Download</button>
           </>
         )}
         <Downloads data={(downloadData)} allowBatch={(allowBatch)} setAllowBatch={(setAllowBatch)} downloadList={(downloadList)} setDownloadList={(setDownloadList)}/>

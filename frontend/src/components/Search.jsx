@@ -3,6 +3,7 @@ import { SearchCheck } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import Movie from './MovieCard'
+import Loading from './Loading'
 const API_URL = import.meta.env.VITE_API_URL
 const Search = () => {
     const [search,setSearch]=useState("");
@@ -68,7 +69,7 @@ const Search = () => {
         </div>
             <div className='all-movies'>    
 
-        {movies ? (
+        {movies.length > 1 ? (
             
             <ul>
             {movies.map((movie)=>(
@@ -77,7 +78,8 @@ const Search = () => {
                </div> 
            ))}
            </ul>
-        ):(        <div>Loading..... </div>   ) 
+        ):(
+            query && movies.length < 1 &&(        <Loading/>   ) )
         }
             </div>
 <div className='flex justify-center'>

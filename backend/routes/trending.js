@@ -7,7 +7,7 @@ import {BASE_API} from "../config/env.js"
     router.get("/trending", async (req,res)=>{
         try {
             const response = await axios.get(`${BASE_API}trending`);
-              const data = response.data?.results?.subjectList || [];
+              const data = response.data?.data?.subjectList || [];
 
 
             res.json({ trendingData: data });

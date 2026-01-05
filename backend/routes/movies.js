@@ -10,7 +10,7 @@ import {BASE_API} from "../config/env.js"
             
             const response = await axios.get(`${BASE_API}homepage`);
 
-                const data = response.data?.results?.operatingList || [];
+                const data = response.data?.data.operatingList || [];
                 let movieList = []
 
                 data.forEach( item =>{ 

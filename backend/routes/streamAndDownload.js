@@ -8,7 +8,7 @@ import DownloadModel from '../models/Downloads.js';
 
     router.get(`/stream-download/:subjectId`, async (req,res)=>{
         const {subjectId} = req.params;
-        const {season,episode} = req.query;
+        const {season,episode,name} = req.query;
 
         try {
             const cachedDownloadLinks = await DownloadModel.find({

@@ -14,21 +14,29 @@ export async function StoreDownloadIntoDB(seasons,episode,subjectId){
             else{
                 dataFromApi = await axios.get(`${BASE_API}sources/${subjectId}?season=${seasons}&episode=${episode}`);
             }
-            const downloadData = dataFromApi.data?.results || [];
-            
-            const ids = downloadData.map(d => d.id);
-            let existingDownloads = [];
-            if (ids.length > 0) {
-                existingDownloads = await DownloadModel.find({ id: { $in: ids } }).distinct("id");
+            const downloadData = dataFromApi.data?.data|| [];
+            let existingDownload = await DownloadModel.findOne({subjectId:subjectId});
+
+            if (existingDownload){
+                console.log("Streaming and Download Data already Cached")
+                return existingDownload;
+            }
+            else{
+                const Stream_DownloadDataSave ={
+                    subjectId:subjectId,
+                    captions:downloadData.captions,
+                    downloads:downloadData.downloads,
+                    stream:downloadData.processedSources,
+                    cachedAt: new Date()
+                };
+                 const savedDescription= await DownloadModel.create(Stream_DownloadDataSave);
+                                 console.log(savedDescription)
+                                 return savedDescription;
+                             
             }
             
-            let newdownloads = downloadData.filter(downloads => !existingDownloads.includes(downloads.id));
             
-            if (newdownloads.length > 0){
-                console.log("All downloads are already cached")
-                await DownloadModel.insertMany(newdownloads,{ordered:false}); 
-            }
-            return newdownloads.length === 0 ? newdownloads:downloadData;
+           
             
             
             

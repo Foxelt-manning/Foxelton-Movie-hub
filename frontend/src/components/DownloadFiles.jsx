@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom'
 import Loading from './Loading';
 
 const Downloads = ({data,allowBatch,setDownloadList,downloadList}) => {
-  const [video,setVideo] =useState(data[0].stream_url);
+  const [video,setVideo] =useState(data[0].stream[0].proxyUrl);
+  console.log(data)
+  console.log(video)
   const [loading,setLoading]= useState(false);
   const videoRef = useRef(null);
 
@@ -47,14 +49,14 @@ const Downloads = ({data,allowBatch,setDownloadList,downloadList}) => {
   </div>
 
   <div className="flex flex-wrap justify-center gap-4 w-full max-w-3xl">
-    {data.map((ep, i) => (
+    {data[0].downloads.map((ep, i) => (
       <div key={i} className="bg-gray-900 p-3 rounded-lg shadow hover:scale-105 transition-transform">
-        <p className="text-sm text-gray-400">{ep.quality}</p>
+        <p className="text-sm text-gray-400">{ep.resolution}</p>
         <p className="text-white">{(ep.size / (1024*1024)).toFixed(2)} MB</p>
-        <a href={ep.download_url} className="bg-red-600 px-3 py-1 rounded mt-2 inline-block hover:bg-red-700">Download</a>
+        <a href={data[0].stream[0].proxyUrl} className="bg-red-600 px-3 py-1 rounded mt-2 inline-block hover:bg-red-700 z-100">Download</a>
         <br />
         {allowBatch && (
-          <button onClick={()=>setDownloadList(prev => [...prev,ep.download_url])}>
+          <button onClick={()=>setDownloadList(prev => [...prev,ep.download_url])} className='text-shadow-indigo-200 bg-blue-300 rounded-lg my-3 px-3 z-50 '>
           Add to batch
           {console.log(downloadList)}
           </button>

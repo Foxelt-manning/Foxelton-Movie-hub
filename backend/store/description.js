@@ -8,8 +8,8 @@ export  default async function StoreDescriptionInDb(subjectId){
 
 
         const response= await axios.get(`${BASE_API}info/${subjectId}`);
-        const descriptionData = response.data?.results?.subject;
-         const FullData = response.data?.results;
+        const descriptionData = response.data?.data?.subject;
+         const FullData = response.data?.data;
         console.log("Full fetch:", FullData);
             console.log("Description Data from API: ", descriptionData);
             

@@ -1,17 +1,36 @@
 import mongoose from "mongoose";
 
-const downloadSchema = new mongoose.Schema({
+const downloadLinksSchema = new mongoose.Schema({
+   id:Number,
+   url:String,
+   resolution:String,
+   size:String
+
+})
+
+const CaptionsSchema = new mongoose.Schema({
+   id: Number,
+   lan: String,
+   url: String,
+   size: String,
+   delay: Number
+
+})
+
+const StreamLinkSchema = new mongoose.Schema({
     id: Number,
-    quality: String,
-    download_url: String,
-    stream_url: String,
+    quality: Number,
+    directUrl: String,
+    proxyUrl : String,
     size: Number,
-    format: String,
-    cachedAt:{
-        type:Date,
-        default:Date.now, 
-        expires:60*60*24*7
-    }
+    format: String
+})
+
+const downloadSchema = new mongoose.Schema({
+   subjectId: {type:Number, required:true},
+   downloads:[downloadLinksSchema],
+   captions:[CaptionsSchema],
+   stream:[StreamLinkSchema]
 })
 
 const DownloadModel = mongoose.model('Download', downloadSchema);
