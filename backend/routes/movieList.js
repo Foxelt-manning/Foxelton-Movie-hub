@@ -13,13 +13,18 @@ import { StoreMoviesInDb } from '../store/movies.js';
        if (!query || query.length < 3) {
            return res.json({ message: "Query must be at least 3 characters long" });
         }
-       
+       if(!page){
+        return page = 1
+       }
         try {
 
             const regex = new RegExp(query, 'i'); // Case-insensitive regex
-            const cachedMovies = await Movie.find({$or:[
-                {title: regex },{genre : regex}
-            ] });
+            const cachedMovies = await Movie.find({
+                $or:[
+                {title: regex },
+                {genre : regex}   
+                 ] 
+        });
 
        
             if (cachedMovies.length > 0) {
@@ -30,7 +35,7 @@ import { StoreMoviesInDb } from '../store/movies.js';
             res.json({ message: "fetched from API", movies: newMovies });
             
         } catch (error) {
-            console.error("Something is wrong with home api",error)
+            console.error("Something is wrong with search api",error)
         }
 
     }); export default router;

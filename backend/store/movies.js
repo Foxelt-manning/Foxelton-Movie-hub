@@ -10,7 +10,7 @@ import { BASE_API } from '../config/env.js';
        ? `${BASE_API}search/${search}?page=${page}`
        : `${BASE_API}search/${search}`
             const dataFromApi= await axios.get(url);
-            const moviesData = dataFromApi.data?.results?.items;
+            const moviesData = dataFromApi.data?.data?.items;
         
             let existingMovies = await Movie.find({subjectId:{$in: moviesData.map(m => m.subjectId)}}).distinct("subjectId");
             

@@ -1,72 +1,241 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import Loading from './Loading';
+import { Download, Play, Pause, Check, X, Copy, Film, Settings, Loader2 } from 'lucide-react'
 
-const Downloads = ({data,allowBatch,setDownloadList,downloadList}) => {
-  const [video,setVideo] =useState(data[0].stream[0].proxyUrl);
-  console.log(data)
-  console.log(video)
-  const [loading,setLoading]= useState(false);
-  const videoRef = useRef(null);
+const Downloads = ({ data, allowBatch, setDownloadList, downloadList }) => {
+    const [currentVideo, setCurrentVideo] = useState(null)
+    const [videoUrl, setVideoUrl] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [isPlaying, setIsPlaying] = useState(false)
+    const [downloadProgress, setDownloadProgress] = useState({})
+    const [copiedLink, setCopiedLink] = useState(null)
+    const videoRef = useRef(null)
 
+    // Safe data initialization
+    useEffect(() => {
+        if (data && data.length > 0) {
+            const firstItem = data[0]
+            const videoSource = firstItem.stream?.[0]?.proxyUrl || firstItem.stream_url
+            console.log(data);
+            setCurrentVideo(firstItem)
+            setVideoUrl(videoSource)
+        }
+    }, [data])
 
-  const handleQualityChange = (url) =>{
-    setVideo(url);
-    setLoading(true);
+    const handleQualityChange = (url, item) => {
+        setVideoUrl(url)
+        setCurrentVideo(item)
+        setLoading(true)
 
-    setTimeout( ()=>{
-      if(videoRef.current){
-        videoRef.current.load();
-        videoRef.current.play().catch(()=>{});
-      }
-    },50)
-  }
+        setTimeout(() => {
+            if (videoRef.current) {
+                videoRef.current.load()
+                videoRef.current.play().catch(() => {})
+            }
+        }, 100)
+    }
 
+    const handleVideoStateChange = (isPlaying) => {
+        setIsPlaying(isPlaying)
+        setLoading(false)
+    }
 
-  return (
-    <>
+    const handleCopyLink = async (url, id) => {
+        try {
+            await navigator.clipboard.writeText(url)
+            setCopiedLink(id)
+            setTimeout(() => setCopiedLink(null), 2000)
+        } catch (error) {
+            console.error('Failed to copy link:', error)
+        }
+    }
 
-  <div className="flex flex-col items-center gap-6 p-4">
-    {loading &&(<Loading/>)}
-  <video className="w-auto max-w-[95vw] h-[75vh] max-h-[95vh] rounded-lg shadow-lg border-2 border-red-500 " 
-   ref={videoRef}
-   key={video} 
-   autoPlay
-   controls>
-    onWaiting={()=>setLoading(true)}
-    onPlaying={()=>setLoading(false)}
-    <source src={video}/>
-  </video>
- <div>
+    const handleAddToBatch = (downloadUrl) => {
+        if (setDownloadList && !downloadList.includes(downloadUrl)) {
+            setDownloadList(prev => [...prev, downloadUrl])
+        }
+    }
 
- <p>Video quality</p>
+    const formatFileSize = (bytes) => {
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`
+        return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
+    }
 
- <select value={video} onChange={(e)=>handleQualityChange(e.target.value)} className='bg-blue-500'>
-    {data.map((ep,i)=>(
-      <option value={ep.stream_url} key={i} >{ep.quality}</option>
-    ))}
-    </select>
-  </div>
+    if (!data || data.length === 0) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+                <div className="text-center">
+                    <Film className="w-24 h-24 text-gray-400 mx-auto mb-4" />
+                    <p className="text-white text-xl">No video data available</p>
+                </div>
+            </div>
+        )
+    }
 
-  <div className="flex flex-wrap justify-center gap-4 w-full max-w-3xl">
-    {data[0].downloads.map((ep, i) => (
-      <div key={i} className="bg-gray-900 p-3 rounded-lg shadow hover:scale-105 transition-transform">
-        <p className="text-sm text-gray-400">{ep.resolution}</p>
-        <p className="text-white">{(ep.size / (1024*1024)).toFixed(2)} MB</p>
-        <a href={data[0].stream[0].proxyUrl} className="bg-red-600 px-3 py-1 rounded mt-2 inline-block hover:bg-red-700 z-100">Download</a>
-        <br />
-        {allowBatch && (
-          <button onClick={()=>setDownloadList(prev => [...prev,ep.download_url])} className='text-shadow-indigo-200 bg-blue-300 rounded-lg my-3 px-3 z-50 '>
-          Add to batch
-          {console.log(downloadList)}
-          </button>
-          )}
-      </div>
-    ))}
-  </div>
-</div>
-    </>
-  )
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
+            <div className="max-w-7xl mx-auto">
+                {/* Video Player Section */}
+                <div className="mb-8">
+                    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+                        <div className="relative">
+                            {loading && (
+                                <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center z-10">
+                                    <Loader2 className="w-12 h-12 text-white animate-spin" />
+                                </div>
+                            )}
+                            
+                            <video
+                                ref={videoRef}
+                                key={videoUrl}
+                                className="w-full aspect-video rounded-xl bg-black shadow-2xl"
+                                autoPlay
+                                controls
+                                onWaiting={() => handleVideoStateChange(false)}
+                                onPlaying={() => handleVideoStateChange(true)}
+                                onPause={() => handleVideoStateChange(false)}
+                            >
+                                <source src={videoUrl} type="video/mp4" />
+                            </video>
+                        </div>
+
+                        {/* Quality Selector */}
+                        <div className="mt-6">
+                            <div className="flex items-center gap-4">
+                                <Settings className="w-5 h-5 text-purple-400" />
+                                <label className="text-white font-medium">Video Quality</label>
+                            </div>
+                            <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
+                                {data.map((item, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => handleQualityChange(
+                                            item.stream?.[0]?.proxyUrl || item.stream_url,
+                                            item
+                                        )}
+                                        className={`p-3 rounded-xl border transition-all ${
+                                            videoUrl === (item.stream?.[0]?.proxyUrl || item.stream_url)
+                                                ? 'bg-purple-500/20 border-purple-400 text-white'
+                                                : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10 hover:border-white/20'
+                                        }`}
+                                    >
+                                        <div className="text-sm font-medium">{item.quality || 'Auto'}</div>
+                                        {item.size && (
+                                            <div className="text-xs text-gray-400 mt-1">
+                                                {formatFileSize(item.size)}
+                                            </div>
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Download Options */}
+                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <Download className="w-6 h-6 text-purple-400" />
+                        Download Options
+                    </h2>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {currentVideo?.downloads?.map((download, index) => (
+                            <div
+                                key={index}
+                                className="bg-white/5 rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all group"
+                            >
+                                {/* Resolution Badge */}
+                                <div className="flex items-center justify-between mb-4">
+                                    <span className="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-medium">
+                                        {download.resolution}
+                                    </span>
+                                    <span className="text-gray-400 text-sm">
+                                        {formatFileSize(download.size)}
+                                    </span>
+                                </div>
+
+                                {/* Download Button */}
+                                <div className="space-y-3">
+                                    <a
+                                        href={download.url}
+                                        download
+                                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-3 rounded-xl hover:scale-105 transition-transform font-medium"
+                                    >
+                                        <Download className="w-4 h-4" />
+                                        Download
+                                    </a>
+
+                                    {/* Copy Link Button */}
+                                    <button
+                                        onClick={() => handleCopyLink(download.url, index)}
+                                        className="w-full flex items-center justify-center gap-2 bg-white/10 text-white px-4 py-3 rounded-xl hover:bg-white/20 transition-colors font-medium"
+                                    >
+                                        {copiedLink === index ? (
+                                            <>
+                                                <Check className="w-4 h-4 text-green-400" />
+                                                Copied!
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Copy className="w-4 h-4" />
+                                                Copy Link
+                                            </>
+                                        )}
+                                    </button>
+
+                                    {/* Batch Download Button */}
+                                    {allowBatch && (
+                                        <button
+                                            onClick={() => handleAddToBatch(download.download_url)}
+                                            disabled={downloadList.includes(download.download_url)}
+                                            className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${
+                                                downloadList.includes(download.download_url)
+                                                    ? 'bg-green-500/20 text-green-400 border border-green-400/30'
+                                                    : 'bg-blue-500/20 text-blue-400 border border-blue-400/30 hover:bg-blue-500/30'
+                                            }`}
+                                        >
+                                            {downloadList.includes(download.download_url) ? (
+                                                <>
+                                                    <Check className="w-4 h-4" />
+                                                    In Batch
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Download className="w-4 h-4" />
+                                                    Add to Batch
+                                                </>
+                                            )}
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Batch Download Summary */}
+                    {allowBatch && downloadList.length > 0 && (
+                        <div className="mt-6 p-4 bg-green-500/10 border border-green-400/30 rounded-xl">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <Check className="w-5 h-5 text-green-400" />
+                                    <span className="text-green-400 font-medium">
+                                        {downloadList.length} items in batch
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={() => setDownloadList([])}
+                                    className="text-red-400 hover:text-red-300 transition-colors"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    )
 }
 
 export default Downloads

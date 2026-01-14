@@ -14,7 +14,7 @@ const Carousel = ({items,renderItem}) => {
         if(direction === "left"){
           current.scrollBy({ left: -scrollAmount, behavior: "smooth" })
         }else{
-             current.scrollBy({ left: scrollAmount,behavoir:"smooth"})
+             current.scrollBy({ left: scrollAmount, behavior:"smooth"})
         }
     };
 
@@ -33,18 +33,20 @@ const Carousel = ({items,renderItem}) => {
  flex overflow-x-scroll  hide-scrollbar scroll-smooth space-x-3'>
             {items.map((item)=>(
                 
-                <div key={item.subjectId}
+                <div key={item.id || item.subjectId}
                  className="w-[200px] max-w-[40%]  h-[300px] rounded-lg overflow-hidden shrink-0 cursor-pointer hover:scale-110 transition"
                 >
                    {renderItem(item)}
                 </div>
             ))}
+        </div>
+
+        {/* Right Arrow Button */}
         <button className='right-arrow'
         onClick={()=>scroll("right")}
         >
             <ChevronRight size={28}/>
         </button>
-        </div>
     </div>
     </>
   )
