@@ -14,13 +14,21 @@ export default defineConfig({
       },
     manifest:{
       name: 'Foxelton Movie Hub',
-      short_name: ' Foxelton MovieHub',
+      short_name: 'Foxelton Movie Hub',
       description: 'Your Ultimate Movie Streaming and Downloading Platform',
-      short_url:'/',
+      start_url: '/',
+      scope: '/',
       display: 'standalone',
       background_color: '#030014',
-        theme_color: '#6b21a8',
-        
+      theme_color: '#6b21a8',
+      icons: [
+        {
+          src: '/Logo%20image.png',
+          sizes: '1254x1254',
+          type: 'image/png',
+          purpose: 'any maskable'
+        }
+      ]
     },
     devOptions: {
       enabled: true

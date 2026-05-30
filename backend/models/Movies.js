@@ -8,6 +8,7 @@ const coverSchema = new mongoose.Schema({
 
 const movieSchema = new mongoose.Schema({
     subjectId: { type: String, required: true, unique: true },
+    searchQuery: { type: String, index: true },
     page: Number,
     title: { type: String, required: true },
     releaseDate: Date,

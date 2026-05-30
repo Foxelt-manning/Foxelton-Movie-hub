@@ -5,8 +5,9 @@ import Movie from '../components/MovieCard'
 import Search from '../components/Search'
 import TMDB_CARD from '../components/TMDB_Card'
 import Footer from '../components/Footer'
+import { Link } from 'react-router-dom'
 import { getFromCache, saveHomepageCache } from '../utils/save_To_local'
-import { Film, TrendingUp, Compass, Star, Play } from 'lucide-react'
+import { TrendingUp, Compass, Star, Play } from 'lucide-react'
 
 const API_URL = import.meta.env.VITE_API_URL
 const TMDB_TOKEN = import.meta.env.TMDB_API_TOKEN
@@ -110,8 +111,12 @@ const Homepage = () => {
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                     <div className="text-center">
                         <div className="flex justify-center mb-6">
-                            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center">
-                                <Film className="w-10 h-10 text-white" />
+                            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center overflow-hidden ring-1 ring-white/10 shadow-lg shadow-purple-500/20">
+                                <img
+                                    src="/Logo%20image.png"
+                                    alt="Foxelton logo"
+                                    className="h-full w-full object-cover"
+                                />
                             </div>
                         </div>
                         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -158,7 +163,9 @@ const Homepage = () => {
                             <TrendingUp className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                            <h2 className="text-3xl font-bold text-white">Trending Now</h2>
+                            <Link to="/trending" className="inline-flex items-center gap-2 text-3xl font-bold text-white hover:text-orange-300 transition-colors">
+                                Trending Now
+                            </Link>
                             <p className="text-gray-400">What everyone's watching</p>
                         </div>
                     </div>
@@ -181,7 +188,9 @@ const Homepage = () => {
                             <Compass className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                            <h2 className="text-3xl font-bold text-white">Discover</h2>
+                            <Link to="/discover" className="inline-flex items-center gap-2 text-3xl font-bold text-white hover:text-cyan-300 transition-colors">
+                                Discover
+                            </Link>
                             <p className="text-gray-400">Explore new horizons</p>
                         </div>
                     </div>

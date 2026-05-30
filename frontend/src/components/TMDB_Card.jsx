@@ -1,7 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { IMG_BASE, searchAndFind } from '../utils/tmdb'
 
 const TMDB_CARD = ({movie}) => {
+  const navigate = useNavigate()
 
 const {id,title,release_date,genre_ids,backdrop_path,overview} = movie
 
@@ -37,13 +39,28 @@ const getGenreNames = (ids) => {
 };
 
 
+  const onClick = (e) => {
+    e.preventDefault()
+    ;(async ()=>{
+      try{
+        const year = release_date ? release_date.split('-')[0] : null
+        const pick = await searchAndFind(title, year)
+        const targetId = pick ? pick.id : id
+        navigate(`/movie/tmdb-${targetId}`)
+      }catch(err){
+        console.error(err)
+        navigate(`/movie/tmdb-${id}`)
+      }
+    })()
+  }
+
   return (
     <>
-    <Link to={`/movie/${id}`}>
+   <a onClick={onClick} href={`/movie/tmdb-${id}`} className="no-underline">
    <div className="movie-card relative rounded-2xl overflow-hidden w-full">
   {/* Movie Image */}
   <img
-    src={img+"/"+backdrop_path|| "/no-movie.png"}
+    src={(backdrop_path ? IMG_BASE + backdrop_path : "/no-movie.png")}
     alt={title}
     className="min-w-[180px] h-[260px] object-cover"
     />
@@ -69,7 +86,7 @@ const getGenreNames = (ids) => {
 
   </div>
 </div>
-    </Link>
+    </a>
 
     </>
   )

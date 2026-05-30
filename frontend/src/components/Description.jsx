@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Carousel from './Carousel'
 import { Play, Star, Calendar, Clock, Globe, Users, ChevronDown, ChevronUp, Film } from 'lucide-react'
+import Ttmdb_description from './Ttmdb_description'
 
 const Description = ({ descriptionData }) => {
     const [expandedSynopsis, setExpandedSynopsis] = useState(false)
     const [activeTab, setActiveTab] = useState('overview')
+    const [tmdbDescription, setTmdbDescription] = useState(null)
 
     if (!descriptionData || descriptionData.length === 0) {
         return (
@@ -20,6 +22,8 @@ const Description = ({ descriptionData }) => {
 
     const data = Array.isArray(descriptionData) ? descriptionData[0] : descriptionData
     const { subjectId, title, genre, releaseDate, metadata, trailer, stars, seasons, imdbRatingValue, duration, countryName } = data
+    const releaseYear = releaseDate ? new Date(releaseDate).getFullYear() : null
+    const effectiveDescription = tmdbDescription || metadata?.description || ''
 
     const tabs = [
         { id: 'overview', label: 'Overview', icon: Film },
@@ -136,11 +140,11 @@ const Description = ({ descriptionData }) => {
                             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
                                 <h2 className="text-2xl font-bold text-white mb-4">Synopsis</h2>
                                 <div className="text-gray-300 leading-relaxed">
-                                    {expandedSynopsis || metadata?.description?.length < 300 
-                                        ? metadata?.description 
-                                        : `${metadata?.description?.substring(0, 300)}...`
+                                    {expandedSynopsis || effectiveDescription?.length < 300
+                                        ? effectiveDescription
+                                        : `${effectiveDescription?.substring(0, 300)}...`
                                     }
-                                    {metadata?.description?.length > 300 && (
+                                    {effectiveDescription?.length > 300 && (
                                         <button
                                             onClick={() => setExpandedSynopsis(!expandedSynopsis)}
                                             className="ml-2 text-purple-400 hover:text-purple-300 flex items-center gap-1 transition-colors"
@@ -197,6 +201,11 @@ const Description = ({ descriptionData }) => {
                                     alt={title}
                                     className="w-full rounded-xl shadow-2xl"
                                 />
+                            </div>
+
+                            {/* TMDB Search / Related */}
+                            <div>
+                                <Ttmdb_description title={title} year={releaseYear} onSelect={setTmdbDescription} />
                             </div>
 
                             {/* Watch Options */}

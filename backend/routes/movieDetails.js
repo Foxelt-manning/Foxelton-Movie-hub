@@ -19,10 +19,15 @@ import DescriptionModel from '../models/Description.js';
                 }
 
                 const newDetails = await StoreDescriptionInDb(subjectId);
-                res.json({message:"cached description successfully",details:newDetails})
+                if (!newDetails) {
+                    // upstream API returned no data
+                    return res.status(404).json({ message: 'No description data found for this subjectId' })
+                }
+                return res.json({message:"cached description successfully",details:newDetails})
 
         } catch(error) {
             console.error("Error fetching details check details Api",error)
+            return res.status(500).json({ message: 'Internal server error', error: error.message })
         }
      }); export default router;
 

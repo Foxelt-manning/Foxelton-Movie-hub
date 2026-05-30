@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Download, Play, Pause, Check, X, Copy, Film, Settings, Loader2 } from 'lucide-react'
 
-const Downloads = ({ data, allowBatch, setDownloadList, downloadList }) => {
+const Downloads = ({ data, allowBatch, setDownloadList, downloadList, season, episode, subjectId }) => {
     const [currentVideo, setCurrentVideo] = useState(null)
     const [videoUrl, setVideoUrl] = useState('')
     const [loading, setLoading] = useState(false)
@@ -58,10 +58,47 @@ const Downloads = ({ data, allowBatch, setDownloadList, downloadList }) => {
         }
     }
 
-    const handleAddToBatch = (downloadUrl) => {
-        if (setDownloadList && !downloadList.includes(downloadUrl)) {
-            setDownloadList(prev => [...prev, downloadUrl])
+    const handleAddToBatch = (download) => {
+        if (!setDownloadList) {
+            return
         }
+
+        const nextItem = {
+            url: download.url,
+            resolution: download.resolution,
+            size: download.size,
+            subjectId,
+            season,
+            episode,
+        }
+
+        if (!downloadList.some(item => item.url === download.url)) {
+            setDownloadList(prev => [...prev, nextItem])
+        }
+    }
+
+    const resolveDownloadUrl = (download) => {
+        if (!download) return ''
+        // Prefer a matching or available stream directUrl first
+        if (currentVideo?.stream && currentVideo.stream.length > 0) {
+            // try to match stream by resolution/quality
+            const matchByQuality = currentVideo.stream.find(s => {
+                if (!s) return false
+                const q = s.quality || String(s.quality)
+                return String(q) === String(download.resolution) || String(q) === String(download.quality)
+            })
+            if (matchByQuality && matchByQuality.directUrl) return matchByQuality.directUrl
+
+            // otherwise prefer the first stream that exposes a directUrl
+            const firstStreamWithDirect = currentVideo.stream.find(s => s.directUrl)
+            if (firstStreamWithDirect) return firstStreamWithDirect.directUrl
+        }
+
+        // next prefer an explicit directUrl on the download item
+        if (download.directUrl) return download.directUrl
+
+        // last resort: use the provided download.url
+        return download.url || ''
     }
 
     const formatFileSize = (bytes) => {
@@ -159,9 +196,10 @@ const Downloads = ({ data, allowBatch, setDownloadList, downloadList }) => {
                                 {/* Download Button */}
                                 <div className="space-y-3">
                                     <a
-                                        href={download.url}
-                                        download
+                                        href={resolveDownloadUrl(download)}
                                         className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-3 rounded-xl hover:scale-105 transition-transform font-medium"
+                                        target="_blank"
+                                        rel="noreferrer noopener"
                                     >
                                         <Download className="w-4 h-4" />
                                         Download
@@ -169,7 +207,7 @@ const Downloads = ({ data, allowBatch, setDownloadList, downloadList }) => {
 
                                     {/* Copy Link Button */}
                                     <button
-                                        onClick={() => handleCopyLink(download.url, index)}
+                                        onClick={() => handleCopyLink(resolveDownloadUrl(download), index)}
                                         className="w-full flex items-center justify-center gap-2 bg-white/10 text-white px-4 py-3 rounded-xl hover:bg-white/20 transition-colors font-medium"
                                     >
                                         {copiedLink === index ? (
@@ -188,15 +226,15 @@ const Downloads = ({ data, allowBatch, setDownloadList, downloadList }) => {
                                     {/* Batch Download Button */}
                                     {allowBatch && (
                                         <button
-                                            onClick={() => handleAddToBatch(download.download_url)}
-                                            disabled={downloadList.includes(download.download_url)}
+                                            onClick={() => handleAddToBatch({ ...download, url: resolveDownloadUrl(download) })}
+                                            disabled={downloadList.some(item => item.url === resolveDownloadUrl(download))}
                                             className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${
-                                                downloadList.includes(download.download_url)
+                                                downloadList.some(item => item.url === resolveDownloadUrl(download))
                                                     ? 'bg-green-500/20 text-green-400 border border-green-400/30'
                                                     : 'bg-blue-500/20 text-blue-400 border border-blue-400/30 hover:bg-blue-500/30'
                                             }`}
                                         >
-                                            {downloadList.includes(download.download_url) ? (
+                                            {downloadList.some(item => item.url === resolveDownloadUrl(download)) ? (
                                                 <>
                                                     <Check className="w-4 h-4" />
                                                     In Batch
@@ -217,11 +255,11 @@ const Downloads = ({ data, allowBatch, setDownloadList, downloadList }) => {
                     {/* Batch Download Summary */}
                     {allowBatch && downloadList.length > 0 && (
                         <div className="mt-6 p-4 bg-green-500/10 border border-green-400/30 rounded-xl">
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between gap-3">
                                 <div className="flex items-center gap-3">
                                     <Check className="w-5 h-5 text-green-400" />
                                     <span className="text-green-400 font-medium">
-                                        {downloadList.length} items in batch
+                                        {downloadList.length} items selected
                                     </span>
                                 </div>
                                 <button
