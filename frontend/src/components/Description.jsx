@@ -188,16 +188,7 @@ const Description = ({ descriptionData }) => {
 
                         {/* Sidebar */}
                         <div className="space-y-6">
-                            {/* Watch Button */}
-                            <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-6 text-center hover:scale-105 transition-transform">
-                                <Play className="w-12 h-12 text-white mx-auto mb-3" />
-                                <h3 className="text-xl font-bold text-white mb-2">Watch Now</h3>
-                                {seasons?.length > 0 ? (
-                                    <p className="text-white/80">{seasons.length} Seasons Available</p>
-                                ) : (
-                                    <p className="text-white/80">Movie Available</p>
-                                )}
-                            </div>
+                           
 
                             {/* Poster */}
                             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-white/10">
@@ -210,14 +201,14 @@ const Description = ({ descriptionData }) => {
 
                             {/* Watch Options */}
                             {seasons && seasons.length > 0 && (
-                                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+                                <div className="bg-red-900 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
                                     <h3 className="text-lg font-bold text-white mb-4">Watch Options</h3>
                                     <div className="space-y-3">
                                         {seasons.map((season, index) => (
                                             <Link
                                                 key={index}
                                                 to={`/stream-download/${subjectId}?season=${season.se}&episode=${season.se}&maxEp=${season.maxEp}`}
-                                                className="block p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors border border-white/10"
+                                                className="block p-4 bg-blue-900/20 rounded-xl hover:bg-white/10 transition-colors border border-white/10"
                                             >
                                                 <div className="flex justify-between items-center">
                                                     <div>
@@ -298,13 +289,13 @@ const Description = ({ descriptionData }) => {
                 {/* Seasons Tab */}
                 {activeTab === 'seasons' && seasons && (
                     <div className="animate-fade-in">
-                        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+                        <div className="bg-red-500 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
                             <h2 className="text-2xl font-bold text-white mb-6">Seasons</h2>
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {seasons.map((season, index) => (
                                     <div 
                                         key={index}
-                                        className="bg-white/5 rounded-xl p-6 hover:bg-white/10 transition-colors border border-white/10"
+                                        className="bg-red-500/20 rounded-xl p-6 hover:bg-white/10 transition-colors border border-white/10"
                                     >
                                         <div className="flex justify-between items-start mb-4">
                                             <div>

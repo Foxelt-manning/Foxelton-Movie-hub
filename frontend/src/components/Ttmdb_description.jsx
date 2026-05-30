@@ -1,7 +1,8 @@
 import React from 'react'
 
-const tmdb_description = ({data}) => {
-  const {backdrop_path,genres,original_title,release_date,runtime,overview,tagline}= data.results
+const Ttmdb_description= ({data}) => {
+  console.log(data) 
+  const {backdrop_path,genres,original_title,release_date,runtime,overview,tagline}= data
 
   const img ="https://image.tmdb.org/t/p/w500/"
   return (
@@ -21,4 +22,4 @@ const tmdb_description = ({data}) => {
   )
 }
 
-export default tmdb_description
+export default Ttmdb_description

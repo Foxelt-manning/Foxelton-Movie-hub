@@ -35,6 +35,8 @@ const NavBar = () => {
                         </span>
                     </Link>
 
+                    
+
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-1">
                         {navItems.map((item) => {

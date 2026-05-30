@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Movie from '../components/MovieCard'
-import Carousel from '../components/Carousel'
+// Carousel intentionally not used here — using grid like Discover
 import Search from '../components/Search'
 import TMDB_CARD from '../components/TMDB_Card'
 import Footer from '../components/Footer'
@@ -141,10 +141,13 @@ const Homepage = () => {
                     </div>
                     
                     <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-                        <Carousel 
-                            items={movies}
-                            renderItem={(item) => <Movie movie={item} />}
-                        />
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                            {movies.map((item) => (
+                                <div key={item.subjectId || item.id} className="transform hover:scale-105 transition-transform duration-300">
+                                    <Movie movie={item} />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </section>
 
@@ -161,10 +164,13 @@ const Homepage = () => {
                     </div>
                     
                     <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-                        <Carousel 
-                            items={trending}
-                            renderItem={(item) => <Movie movie={item} />}
-                        />
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                            {trending.map((item) => (
+                                <div key={item.subjectId || item.id} className="transform hover:scale-105 transition-transform duration-300">
+                                    <Movie movie={item} />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </section>
 

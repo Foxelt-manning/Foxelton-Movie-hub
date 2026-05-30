@@ -22,19 +22,30 @@ const Carousel = ({items,renderItem}) => {
     <>
     <div className="mb-8 relative">
 
+      {/* Mobile and tablet list */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:hidden">
+        {items.map((item) => (
+          <div
+            key={item.id || item.subjectId}
+            className="w-full"
+          >
+            {renderItem(item)}
+          </div>
+        ))}
+      </div>
+
         {/* left Arrow Button */}
-        <button className='left-arrow'
+      <button className='left-arrow hidden lg:flex'
         onClick={()=>scroll("left")}>
         <ChevronLeft size={28}/>
         </button>
 
         {/* scroll Row */}
-        <div ref={rowRef} className=' responsive-carousel
- flex overflow-x-scroll  hide-scrollbar scroll-smooth space-x-3'>
+      <div ref={rowRef} className='hidden lg:flex responsive-carousel flex overflow-x-scroll hide-scrollbar scroll-smooth space-x-3'>
             {items.map((item)=>(
                 
                 <div key={item.id || item.subjectId}
-                 className="w-[200px] max-w-[40%]  h-[300px] rounded-lg overflow-hidden shrink-0 cursor-pointer hover:scale-110 transition"
+           className="w-[200px] max-w-[40%] h-[300px] rounded-lg overflow-hidden shrink-0 cursor-pointer hover:scale-110 transition"
                 >
                    {renderItem(item)}
                 </div>
@@ -42,7 +53,7 @@ const Carousel = ({items,renderItem}) => {
         </div>
 
         {/* Right Arrow Button */}
-        <button className='right-arrow'
+      <button className='right-arrow hidden lg:flex'
         onClick={()=>scroll("right")}
         >
             <ChevronRight size={28}/>

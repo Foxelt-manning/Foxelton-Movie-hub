@@ -13,13 +13,21 @@ const Downloads = ({ data, allowBatch, setDownloadList, downloadList }) => {
 
     // Safe data initialization
     useEffect(() => {
+        console.log('Received video data:', data)
         if (data && data.length > 0) {
             const firstItem = data[0]
             const videoSource = firstItem.stream?.[0]?.proxyUrl || firstItem.stream_url
             console.log(data);
             setCurrentVideo(firstItem)
             setVideoUrl(videoSource)
+        }else {
+             const firstItem = data
+            const videoSource = firstItem.stream?.[0]?.proxyUrl || firstItem.stream_url
+            console.log(data);
+            setCurrentVideo(firstItem)
+            setVideoUrl(videoSource)
         }
+       
     }, [data])
 
     const handleQualityChange = (url, item) => {
@@ -106,23 +114,16 @@ const Downloads = ({ data, allowBatch, setDownloadList, downloadList }) => {
                                 <label className="text-white font-medium">Video Quality</label>
                             </div>
                             <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3">
-                                {data.map((item, index) => (
+                           {     currentVideo?.stream?.map((stream, index) => (
                                     <button
                                         key={index}
-                                        onClick={() => handleQualityChange(
-                                            item.stream?.[0]?.proxyUrl || item.stream_url,
-                                            item
-                                        )}
-                                        className={`p-3 rounded-xl border transition-all ${
-                                            videoUrl === (item.stream?.[0]?.proxyUrl || item.stream_url)
-                                                ? 'bg-purple-500/20 border-purple-400 text-white'
-                                                : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10 hover:border-white/20'
-                                        }`}
+                                        onClick={() => handleQualityChange(stream.proxyUrl || stream.url, currentVideo)}
+                                        className="p-3 rounded-xl border transition-all hover:bg-white/10"
                                     >
-                                        <div className="text-sm font-medium">{item.quality || 'Auto'}</div>
-                                        {item.size && (
+                                        <div className="text-sm font-medium">{stream.quality || 'Auto'}</div>
+                                        {stream.size && (
                                             <div className="text-xs text-gray-400 mt-1">
-                                                {formatFileSize(item.size)}
+                                                {formatFileSize(stream.size)}
                                             </div>
                                         )}
                                     </button>

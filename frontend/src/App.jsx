@@ -5,6 +5,7 @@ import MovieDetails from './pages/MovieDetails'
 import StreamAndDownload from './pages/StreamAndDownload'
 import Search from './components/Search'
 import NavBar from './components/NavBar'
+import Ttmdb_description from './components/Ttmdb_description'
 
 
 const App = () => {
